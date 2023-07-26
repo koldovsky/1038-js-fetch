@@ -1,0 +1,13 @@
+.products__carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.products__carousel-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
