@@ -16,7 +16,7 @@ app.get('/api/chat', (req, res) => {
 });
 
 app.post('/api/chat', (req, res) => {
-    fs.appendFileSync('./chat.txt', req.body.message + '\n', function(err) {
+    fs.appendFileSync('./chat.txt', req.body.message + '\n', function (err) {
         if (err) {
             res.status(500).send('Server Error');
         }
@@ -29,7 +29,7 @@ app.post('/api/chatgpt', async (req, res) => {
     try {
         // Extract message from frontend request
         const message = req.body.message;
-        console.log({message});
+        console.log({ message });
 
         // Replace with your OpenAI API key
         const apiKey = '';
@@ -46,10 +46,10 @@ app.post('/api/chatgpt', async (req, res) => {
         // Set up the prompt and other parameters for the ChatGPT API request
         const data = {
             model: "gpt-3.5-turbo",
-            prompt: `${message}\n`,
-            max_tokens: 50,
-            n: 1,
-            stop: null,
+            messages: [
+                { "role": "system", "content": "You are helpful assistant" },
+                { "role": "user", "content": message },
+            ],
             temperature: 0.5,
         };
 
@@ -64,8 +64,8 @@ app.post('/api/chatgpt', async (req, res) => {
         if (response.ok) {
             const responseData = await response.json();
             // Extract the first generated response from the API response
-            const chatGPTResponse = responseData.choices[0].text.trim();
-            console.log({chatGPTResponse});
+            const chatGPTResponse = responseData.choices[0].message.content;
+            console.log({ chatGPTResponse });
             // Send the ChatGPT response back to the frontend
             res.json({ message: chatGPTResponse });
         } else {
